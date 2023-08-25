@@ -1,7 +1,6 @@
 __pycache__/
 *.pyc
 *.py[cod]
-*.json
 
 .Python
 build/
@@ -25,3 +24,5 @@ MANIFEST
 samples/*.mp4
 test/parse.py
 tmp/
+export/
+export_frames/
