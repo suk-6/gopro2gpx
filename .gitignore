@@ -1,6 +1,7 @@
 __pycache__/
 *.pyc
 *.py[cod]
+*.json
 
 .Python
 build/

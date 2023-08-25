@@ -4,6 +4,10 @@ import os
 from glob import glob
 import random
 
+if not os.path.exists('./tmp'):
+    os.makedirs('./tmp')
+else:
+    os.system('rm -rf ./tmp/*')
 
 # 출력 JSON 파일 경로
 outputPath = 'data.json'
