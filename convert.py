@@ -31,7 +31,7 @@ def randomColor():
     color = "#{:02x}{:02x}{:02x}".format(random.randint(0, 255), random.randint(0, 255), random.randint(0, 255))
     return color
 
-def saveFrame(point, kmlPath):
+def saveFrame(point, kmlPath, markerCount):
     GPXPath = kmlPath.replace('.kml', '.gpx')
 
     root = ET.parse(os.path.join(GPXPath)).getroot()
@@ -65,7 +65,6 @@ def saveFrame(point, kmlPath):
             
             if ret:
                 # 프레임 저장
-                markerCount = len(polylines["marker"])
                 outputPath = f"./{outputPath_images}{markerCount}.jpg"
                 cv2.imwrite(outputPath, frame)
                 print(f"Frame saved to {markerCount}.jpg")
@@ -76,8 +75,11 @@ def saveFrame(point, kmlPath):
     cap.release()
 
 def makeMarker(point, kmlPath):
+    markerCount = len(polylines["marker"])
+
     marker = {
 			"type": "marker",
+            "index": markerCount,
 			"x": point['x'],
 			"y": point['y'],
 			"coordinate": "wgs84",
@@ -85,7 +87,7 @@ def makeMarker(point, kmlPath):
 			"content": ""
 		}
     
-    saveFrame(point, kmlPath)
+    saveFrame(point, kmlPath, markerCount)
 
     return marker
 
