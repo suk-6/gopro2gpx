@@ -105,6 +105,8 @@ def saveFrame(point, kmlPath, pointCount):
             except Exception as e:
                 print("Failed to read frame:", e)
 
+                return None
+
     # 영상 읽기 종료
     cap.release()
 
@@ -113,6 +115,9 @@ def savePoint(point, kmlPath):
     pointCount = len(polylines["marker"])
 
     detection = saveFrame(point, kmlPath, pointCount)
+
+    if detection is None:
+        return None
 
     marker = {
         "type": "marker",
