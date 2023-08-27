@@ -7,6 +7,13 @@ from datetime import datetime
 from natsort import natsorted
 import xml.etree.ElementTree as ET
 import cv2
+from dotenv import load_dotenv
+import requests
+import base64
+
+load_dotenv(".env")
+
+detectionURL = os.getenv("detectionURL")
 
 if not os.path.exists("./tmp"):
     os.makedirs("./tmp")
@@ -23,7 +30,7 @@ if not os.path.exists("./export_frames"):
 outputPath_json = f'./export/{datetime.now().strftime("%Y-%m-%d_%H-%M-%S")}.json'
 outputPath_images = "./export_frames/"
 
-videosPath = "/tmp/test2/"
+videosPath = "/Volumes/T7/Original-videos/wangsimni3/videos/"
 videoFiles = natsorted(os.listdir(videosPath))
 print(videoFiles)
 
@@ -33,6 +40,21 @@ def randomColor():
         random.randint(0, 255), random.randint(0, 255), random.randint(0, 255)
     )
     return color
+
+
+def detectObjects(frame):
+    # 이미지를 base64로 변환
+    _, buffer = cv2.imencode(".jpg", frame)
+    textImage = buffer.tobytes()
+    base64Image = str(base64.b64encode(textImage), "utf-8")
+
+    response = requests.post(detectionURL, data={"frame": base64Image})
+
+    detection = response.json()
+
+    print(detection)
+
+    return detection
 
 
 def saveFrame(point, kmlPath, pointCount):
@@ -71,13 +93,17 @@ def saveFrame(point, kmlPath, pointCount):
             # 프레임 읽기
             ret, frame = cap.read()
 
-            if ret:
+            try:
                 # 프레임 저장
                 outputPath = f"./{outputPath_images}{pointCount}.jpg"
                 cv2.imwrite(outputPath, frame)
                 print(f"Frame saved to {pointCount}.jpg")
-            else:
-                print("Failed to read frame")
+
+                # 프레임에 대한 객체 검출
+                return detectObjects(frame)
+
+            except Exception as e:
+                print("Failed to read frame:", e)
 
     # 영상 읽기 종료
     cap.release()
@@ -85,6 +111,8 @@ def saveFrame(point, kmlPath, pointCount):
 
 def savePoint(point, kmlPath):
     pointCount = len(polylines["marker"])
+
+    detection = saveFrame(point, kmlPath, pointCount)
 
     marker = {
         "type": "marker",
@@ -95,9 +123,8 @@ def savePoint(point, kmlPath):
         "zIndex": 0,
         "content": "",
         "videoName": videoDict[kmlPath.split("/")[-1].replace(".kml", "")],
+        "detection": detection,
     }
-
-    saveFrame(point, kmlPath, pointCount)
 
     return marker
 
