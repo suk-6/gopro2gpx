@@ -164,14 +164,15 @@ for video in videoFiles:
 
 kmlFiles = glob("./tmp/*.kml")
 
-for kmlFile in kmlFiles:
-    points = convert(kmlFile)
+for kmlPath in kmlFiles:
+    points = convert(kmlPath)
     color = randomColor()
 
     polyline = {
         "type": "polyline",
         "points": points,
         "coordinate": "wgs84",
+        "videoName": videoDict[kmlPath.split("/")[-1].replace(".kml", "")],
         "options": {
             "strokeColor": color,
             "strokeWeight": 5,
