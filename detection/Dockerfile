@@ -1,0 +1,18 @@
+FROM python:3.10.6
+
+ENV TZ Asia/Seoul
+ENV PYTHONIOENCODING UTF-8
+ENV LC_CTYPE C.UTF-8
+
+LABEL maintainer="https://suk.kr"
+
+WORKDIR /server
+
+COPY . .
+
+# RUN apt update && apt install libgl1-mesa-glx ffmpeg libsm6 libxext6 -y
+RUN git clone https://github.com/ultralytics/yolov5
+RUN pip install -r ./yolov5/requirements.txt
+RUN pip install flask
+
+CMD [ "python", "./app.py" ]

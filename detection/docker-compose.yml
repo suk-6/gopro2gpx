@@ -1,0 +1,6 @@
+services:
+  server:
+    build: .
+    container_name: Image_Detection
+    ports:
+      - "20005:10001"
