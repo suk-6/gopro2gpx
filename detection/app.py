@@ -30,7 +30,7 @@ def detect():
     for bbox in zip(results.xyxy[0]):
         _, _, _, _, conf, label = bbox[0].tolist()
 
-        if conf > 0.5:
+        if conf > 0.3:
             annos.append(
                 {
                     "label": int(label),
