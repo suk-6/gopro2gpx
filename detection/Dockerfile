@@ -8,6 +8,6 @@ LABEL maintainer="https://suk.kr"
 
 COPY . .
 
-RUN pip install flask
+RUN python3 -m pip install flask
 
 CMD [ "python3", "./app.py" ]
