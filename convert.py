@@ -158,14 +158,14 @@ def convert(kmlPath):
             result = {"x": float(longitude), "y": float(latitude)}
             points.append(result)
 
-            if i % 300 == 0:
+            if i % 100 == 0:
                 saveDict["marker"].append(savePoint(result, kmlPath))
 
     return points
 
 
 def overwriteJSON():
-    marker.saveAvg()
+    marker.saveSum()
     saveDict["marker"] = marker.saveMarker()
     saveDict["polyline"] = calc.colorLine()
 
