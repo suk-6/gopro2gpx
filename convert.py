@@ -10,6 +10,9 @@ import cv2
 from dotenv import load_dotenv
 import requests
 import base64
+from marker import Marker
+
+marker = Marker()
 
 load_dotenv(".env")
 
@@ -112,7 +115,7 @@ def saveFrame(point, kmlPath, pointCount):
 
 
 def savePoint(point, kmlPath):
-    pointCount = len(polylines["marker"])
+    pointCount = len(saveDict["marker"])
 
     detection = saveFrame(point, kmlPath, pointCount)
 
@@ -154,12 +157,19 @@ def convert(kmlPath):
             points.append(result)
 
             if i % 300 == 0:
-                polylines["marker"].append(savePoint(result, kmlPath))
+                saveDict["marker"].append(savePoint(result, kmlPath))
 
     return points
 
 
-polylines = {"marker": [], "polyline": []}
+def overwriteMarker():
+    saveDict["marker"] = marker.saveMarker()
+
+    with open(outputPath_json, "w") as jsonFile:
+        json.dump(saveDict, jsonFile, indent=4)
+
+
+saveDict = {"marker": [], "polyline": []}
 
 videoDict = {}
 
@@ -186,9 +196,11 @@ for kmlPath in kmlFiles:
         },
     }
 
-    polylines["polyline"].append(polyline)
+    saveDict["polyline"].append(polyline)
 
 with open(outputPath_json, "w") as jsonFile:
-    json.dump(polylines, jsonFile, indent=4)
+    json.dump(saveDict, jsonFile, indent=4)
 
 print(f"saved to {outputPath_json}.")
+
+overwriteMarker()
