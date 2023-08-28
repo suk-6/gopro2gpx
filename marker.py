@@ -12,7 +12,6 @@ class Marker:
         self.jsonData = utiljson.getJSON()
         self.count = {}
         self.addVideoName()
-        self.saveAvg()
 
     def addVideoName(self):
         polyline = self.jsonData["polyline"]
@@ -27,13 +26,14 @@ class Marker:
         for marker in markers:
             if marker == None:
                 continue
-            videoName = marker["videoName"]
-            sumDetect = self.count[videoName]
-            for label in marker["detection"].keys():
-                labelCount = marker["detection"][label]
-                if label not in sumDetect:
-                    sumDetect[label] = 0
-                sumDetect[label] += labelCount
+            countObject = self.count[marker["videoName"]]
+            for detection in marker["detection"]:
+                label = detection["label"]
+                if label not in countObject:
+                    countObject[label] = 0
+                countObject[label] += 1
+
+        return self.count
 
     def saveMarker(self):
         polyline = self.jsonData["polyline"]

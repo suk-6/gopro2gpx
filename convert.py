@@ -11,8 +11,10 @@ from dotenv import load_dotenv
 import requests
 import base64
 from marker import Marker
+from calcline import Calc
 
 marker = Marker()
+calc = Calc()
 
 load_dotenv(".env")
 
@@ -162,8 +164,10 @@ def convert(kmlPath):
     return points
 
 
-def overwriteMarker():
+def overwriteJSON():
+    marker.saveAvg()
     saveDict["marker"] = marker.saveMarker()
+    saveDict["polyline"] = calc.colorLine()
 
     with open(outputPath_json, "w") as jsonFile:
         json.dump(saveDict, jsonFile, indent=4)
@@ -203,4 +207,4 @@ with open(outputPath_json, "w") as jsonFile:
 
 print(f"saved to {outputPath_json}.")
 
-overwriteMarker()
+overwriteJSON()

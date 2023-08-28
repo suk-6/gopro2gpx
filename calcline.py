@@ -10,6 +10,7 @@ class Calc:
         self.videoPoint = {}
         self.calcPoint = {}
         self.loadPoint()
+        self.calcLine()
 
     def getLine(self, videoName):
         polyline = self.jsonData["polyline"]
@@ -70,7 +71,18 @@ class Calc:
 
         return self.calcPoint
 
+    def colorLine(self):
+        polyline = self.jsonData["polyline"]
 
-calc = Calc()
+        for line in polyline:
+            afterVideos = self.calcPoint[line["videoName"]]
+            if len(afterVideos) == 0:
+                continue
+            for afterVideo in afterVideos:
+                for afterLine in polyline:
+                    if afterLine["videoName"] == afterVideo:
+                        afterLine["options"]["strokeColor"] = line["options"][
+                            "strokeColor"
+                        ]
 
-print(calc.calcLine())
+        return polyline
