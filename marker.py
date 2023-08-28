@@ -44,10 +44,12 @@ class Marker:
             if marker == None:
                 continue
             videoName = marker["videoName"]
-            for data in marker["detection"]:
-                self.count[videoName][data["label"]] = (
-                    self.count[videoName].get(data["label"], 0) + 1
-                )
+            sumDetect = self.count[videoName]
+            for label in marker["detection"].keys():
+                labelCount = marker["detection"][label]
+                if label not in sumDetect:
+                    sumDetect[label] = 0
+                sumDetect[label] += labelCount
 
     def saveMarker(self):
         polyline = self.jsonData["polyline"]
@@ -58,9 +60,11 @@ class Marker:
                 detection = self.count[line["videoName"]]
                 midIndex = int(len(points) / 2)
                 midPoint = points[midIndex]
+                pointCount = len(self.markers)
 
                 marker = {
                     "type": "marker",
+                    "index": pointCount,
                     "x": midPoint["x"],
                     "y": midPoint["y"],
                     "coordinate": "wgs84",
