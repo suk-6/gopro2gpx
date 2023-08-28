@@ -33,7 +33,7 @@ if not os.path.exists("./export_frames"):
 outputPath_json = f'./export/{datetime.now().strftime("%Y-%m-%d_%H-%M-%S")}.json'
 outputPath_images = "./export_frames/"
 
-videosPath = "/Volumes/T7/Original-videos/wangsimni3/videos/"
+videosPath = "/Users/woosuk/Downloads/videos/"
 videoFiles = natsorted(os.listdir(videosPath))
 print(videoFiles)
 
