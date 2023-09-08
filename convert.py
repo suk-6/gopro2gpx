@@ -30,12 +30,14 @@ if not os.path.exists("./export"):
 
 if not os.path.exists("./export_frames"):
     os.makedirs("./export_frames")
+else:
+    os.system("rm -rf ./export_frames/*")
 
 # 출력 JSON 파일 경로
 outputPath_json = f'./export/{datetime.now().strftime("%Y-%m-%d_%H-%M-%S")}.json'
 outputPath_images = "./export_frames/"
 
-videosPath = "/Users/woosuk/Downloads/videos/"
+videosPath = "/Volumes/T7/Original-videos/0905/videos/"
 videoFiles = natsorted(os.listdir(videosPath))
 print(videoFiles)
 
@@ -165,7 +167,7 @@ def convert(kmlPath):
 
 
 def overwriteJSON():
-    marker.saveSum()
+    print(marker.saveSum())
     saveDict["marker"] = marker.saveMarker()
     saveDict["polyline"] = calc.colorLine()
 

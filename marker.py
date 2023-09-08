@@ -23,17 +23,18 @@ class Marker:
     def saveSum(self):
         markers = self.jsonData["marker"]
 
-        try:
-            for marker in markers:
-                countObject = self.count[marker["videoName"]]
-                for detection in marker["detection"]:
-                    label = detection["label"]
-                    if label not in countObject:
-                        countObject[label] = 0
-                    countObject[label] += 1
-            return self.count
-        except:
-            return None
+        for marker in markers:
+            if marker == None:
+                continue
+            countObject = self.count[marker["videoName"]]
+            for detection in marker["detection"]:
+                if detection == []:
+                    continue
+                label = detection["label"]
+                if label not in countObject:
+                    countObject[label] = 0
+                countObject[label] += 1
+        return self.count
 
     # def saveMarker(self):
     #     polyline = self.jsonData["polyline"]

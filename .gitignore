@@ -1,6 +1,7 @@
 __pycache__/
 *.pyc
 *.py[cod]
+test.py
 
 .Python
 build/
