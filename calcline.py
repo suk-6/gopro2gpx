@@ -10,7 +10,7 @@ class Calc:
         self.videoPoint = {}
         self.calcPoint = {}
         self.loadPoint()
-        self.calcLine()
+        self.calcContinuousLine()
 
     def getLine(self, videoName):
         polyline = self.jsonData["polyline"]
@@ -43,7 +43,7 @@ class Calc:
         x2, y2 = point2["x"], point2["y"]
         return math.sqrt((x2 - x1) ** 2 + (y2 - y1) ** 2)
 
-    def isWithinRadius(self, point1, point2, radius=0.001):
+    def isWithinRadius(self, point1, point2, radius=0.0005):
         distance = self.calcDistance(point1, point2)
         return distance <= radius
 
@@ -58,7 +58,7 @@ class Calc:
                     video["videoName"]
                 )
 
-    def calcLine(self):
+    def calcContinuousLine(self):
         for video in self.videoPoint.keys():
             end = self.videoPoint[video]["end"]
             self.calcPoint[video] = []
@@ -69,6 +69,7 @@ class Calc:
                 if self.isWithinRadius(end, compareStart):
                     self.calcPoint[video].append(compareVideo)
 
+        print(self.calcPoint)
         return self.calcPoint
 
     def colorLine(self):
