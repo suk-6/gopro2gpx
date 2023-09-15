@@ -169,7 +169,7 @@ def convert(kmlPath):
 def overwriteJSON():
     print(marker.saveSum())
     saveDict["marker"] = marker.saveMarker()
-    saveDict["polyline"] = calc.colorLine()
+    saveDict["polyline"] = calc.calcPoint2Point()
 
     with open(outputPath_json, "w") as jsonFile:
         json.dump(saveDict, jsonFile, indent=4)
