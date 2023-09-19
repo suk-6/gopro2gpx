@@ -1,17 +1,13 @@
 import json
 import os
-from utiljson import Utiljson
-
-utiljson = Utiljson()
 
 
 class Marker:
     def __init__(self):
         self.jsonFolder = "./export"
         self.markers = []
-        self.jsonData = utiljson.getJSON()
+        self.jsonData = {}
         self.count = {}
-        self.addVideoName()
 
     def addVideoName(self):
         polyline = self.jsonData["polyline"]
@@ -20,7 +16,9 @@ class Marker:
             if line["videoName"] != None:
                 self.count[line["videoName"]] = {}
 
-    def saveSum(self):
+    def saveSum(self, jsonData):
+        self.jsonData = jsonData
+        self.addVideoName()
         markers = self.jsonData["marker"]
 
         for marker in markers:
@@ -28,8 +26,7 @@ class Marker:
                 continue
             countObject = self.count[marker["videoName"]]
             for detection in marker["detection"]:
-                if detection == []:
-                    continue
+                print(detection)
                 label = detection["label"]
                 if label not in countObject:
                     countObject[label] = 0

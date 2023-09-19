@@ -1,16 +1,11 @@
-from utiljson import Utiljson
 import math
-
-utiljson = Utiljson()
 
 
 class Calc:
     def __init__(self):
-        self.jsonData = utiljson.getJSON()
+        self.jsonData = {}
         self.videoPoint = {}
         self.calcPoint = {}
-        self.loadPoint()
-        self.calcContinuousLine()
 
     def getLine(self, videoName):
         polyline = self.jsonData["polyline"]
@@ -43,7 +38,7 @@ class Calc:
         x2, y2 = point2["x"], point2["y"]
         return math.sqrt((x2 - x1) ** 2 + (y2 - y1) ** 2)
 
-    def isWithinRadius(self, point1, point2, radius=0.0005):
+    def isWithinRadius(self, point1, point2, radius=0.001):
         distance = self.calcDistance(point1, point2)
         return distance <= radius
 
@@ -69,7 +64,7 @@ class Calc:
                 if self.isWithinRadius(end, compareStart):
                     self.calcPoint[video].append(compareVideo)
 
-        print(self.calcPoint)
+        # print(self.calcPoint)
         return self.calcPoint
 
     def colorLine(self):
@@ -108,7 +103,10 @@ class Calc:
 
         return distance
 
-    def calcPoint2Point(self):
+    def calcPoint2Point(self, jsonData):
+        self.jsonData = jsonData
+        self.loadPoint()
+        self.calcContinuousLine()
         polyline = self.colorLine()
 
         for line in polyline:

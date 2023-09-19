@@ -12,9 +12,11 @@ import requests
 import base64
 from marker import Marker
 from calcline import Calc
+from utiljson import Utiljson
 
 marker = Marker()
 calc = Calc()
+utiljson = Utiljson()
 
 load_dotenv(".env")
 
@@ -37,7 +39,7 @@ else:
 outputPath_json = f'./export/{datetime.now().strftime("%Y-%m-%d_%H-%M-%S")}.json'
 outputPath_images = "./export_frames/"
 
-videosPath = "/Volumes/T7/Original-videos/0905/videos/"
+videosPath = "/Volumes/T7/Original-videos/hnavi/"
 videoFiles = natsorted(os.listdir(videosPath))
 print(videoFiles)
 
@@ -167,9 +169,10 @@ def convert(kmlPath):
 
 
 def overwriteJSON():
-    print(marker.saveSum())
+    latestJson = utiljson.getJSON()
+    print(marker.saveSum(latestJson))
     saveDict["marker"] = marker.saveMarker()
-    saveDict["polyline"] = calc.calcPoint2Point()
+    saveDict["polyline"] = calc.calcPoint2Point(latestJson)
 
     with open(outputPath_json, "w") as jsonFile:
         json.dump(saveDict, jsonFile, indent=4)

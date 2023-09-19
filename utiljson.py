@@ -16,6 +16,7 @@ class Utiljson:
 
         if jsonFiles:
             latestJson = os.path.join(self.jsonFolder, jsonFiles[0])
+            print(f"latestJson: {latestJson}")
 
             # JSON 파일 내용 읽어오기
             with open(latestJson, "r") as jsonFile:
