@@ -43,12 +43,13 @@ videosPath = "/Volumes/T7/Original-videos/hnavi/"
 videoFiles = natsorted(os.listdir(videosPath))
 print(videoFiles)
 
+# 시작 영상 지정
+# startVideo = input("Start video: ")
+startVideo = "GX010353.MP4"
 
-def randomColor():
-    color = "#{:02x}{:02x}{:02x}".format(
-        random.randint(0, 255), random.randint(0, 255), random.randint(0, 255)
-    )
-    return color
+# 끝 영상 지정
+# endVideos = input("End videos: ").split()
+endVideos = ["GX010364.MP4", "GX010343.MP4", "GX010365.MP4"]
 
 
 def detectObjects(frame):
@@ -172,8 +173,7 @@ def overwriteJSON():
     latestJson = utiljson.getJSON()
     print(marker.saveSum(latestJson))
     saveDict["marker"] = marker.saveMarker()
-    saveDict["polyline"] = calc.calcPoint2Point(latestJson)
-
+    saveDict["polyline"] = calc.run(saveDict, startVideo, endVideos)
     with open(outputPath_json, "w") as jsonFile:
         json.dump(saveDict, jsonFile, indent=4)
 
@@ -190,7 +190,6 @@ kmlFiles = glob("./tmp/*.kml")
 
 for kmlPath in kmlFiles:
     points = convert(kmlPath)
-    color = randomColor()
 
     polyline = {
         "type": "polyline",
@@ -198,7 +197,7 @@ for kmlPath in kmlFiles:
         "coordinate": "wgs84",
         "videoName": videoDict[kmlPath.split("/")[-1].replace(".kml", "")],
         "options": {
-            "strokeColor": color,
+            "strokeColor": "#808080",
             "strokeWeight": 5,
             "strokeStyle": "solid",
             "strokeOpacity": 1,
