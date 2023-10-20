@@ -101,12 +101,12 @@ labels = [
     "banner",
 ]
 
-weightofObject = {  # 1 ~ 10, Default: 1
-    "person": 2,
-    "car": 2,
-    "bus": 3,
-    "truck": 4,
-    "motorcycle": 7,
-    "bicycle": 7,
-    "kick_board": 7,
+weightofObject = {  # 0 ~ 1, Default: 0.1
+    "person": 0.2,
+    "car": 0.2,
+    "bus": 0.3,
+    "truck": 0.4,
+    "motorcycle": 0.7,
+    "bicycle": 0.7,
+    "kick_board": 0.7,
 }

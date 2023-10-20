@@ -173,7 +173,7 @@ def overwriteJSON():
     latestJson = utiljson.getJSON()
     print(marker.saveSum(latestJson))
     saveDict["marker"] = marker.saveMarker()
-    saveDict["polyline"] = calc.run(saveDict, startVideo, endVideos)
+    saveDict = calc.run(saveDict, startVideo, endVideos)
     with open(outputPath_json, "w") as jsonFile:
         json.dump(saveDict, jsonFile, indent=4)
 

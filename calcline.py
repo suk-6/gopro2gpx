@@ -254,11 +254,12 @@ class Calc:
             try:
                 weight = weightofObject[labels[int(object)]]
             except:
-                weight = 1
+                weight = 0.1
 
             congestion += objects[object] * weight
 
-        return (congestion**2) / 10e4
+        # return round(((congestion**2) / 10e2), 1)
+        return round(congestion, 1)
 
     def lowCongestionGroup(self):  # 혼잡도가 가장 낮은 그룹 찾기 (초록색으로 표시)
         lowCongestionGroup = self.group[0]
@@ -268,6 +269,36 @@ class Calc:
                 lowCongestionGroup = group
 
         self.colorLine(lowCongestionGroup["videos"], self.colors["green"])
+
+    def lastMarker(self):
+        originMarkers = self.jsonData["marker"]
+        usedVideos = []
+        markers = []
+
+        for group in self.group:
+            midVideo = group["videos"][len(group["videos"]) // 2]
+
+            if midVideo in usedVideos:
+                for i in range(len(group["videos"])):
+                    if group["videos"][i] not in usedVideos:
+                        midVideo = group["videos"][i]
+                        break
+
+            for marker in originMarkers:
+                if marker == None:
+                    continue
+                if marker["videoName"] == midVideo:
+                    marker["index"] = group["index"]
+                    marker["detection"] = group["objects"]
+                    marker["videos"] = group["videos"]
+                    marker["congestion"] = group["congestion"]
+                    marker["lineLength"] = group["lineLength"]
+
+                    markers.append(marker)
+
+            usedVideos += group["videos"]
+
+        return markers
 
     def run(self, jsonData, startVideo, endVideos=[]):
         self.jsonData = jsonData
@@ -284,4 +315,8 @@ class Calc:
         self.longestGroup()
         self.lowCongestionGroup()
 
-        return self.polyline
+        self.jsonData["polyline"] = self.polyline
+        self.jsonData["group"] = self.group
+        self.jsonData["marker"] = self.lastMarker()
+
+        return self.jsonData
